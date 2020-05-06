@@ -13,6 +13,8 @@
 	style="border-style: solid;"></div>
 
 <textarea id="code" rows="0" cols="0">
+This is my code
+
 import copy 
 import time
 import random
@@ -239,13 +241,15 @@ def fini(tablocal):
 
 
 difficulte = 3
-dessineboutons()
 tab = [["." for i in range(3)]for j in range(3)]
 working=False
 sign = "X"
+turtle.tracer(0, 0)
+dessineboutons()
 print(grille())
+turtle.update()
 screen.onscreenclick(clicked)
-turtle.mainloop()    
+turtle.mainloop()   
     
 </textarea>
     <script>
