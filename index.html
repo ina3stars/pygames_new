@@ -61,7 +61,6 @@ except:
     t = turtle.Turtle()
 
 
-turtle.bgcolor("black")
 turtle.pencolor("white")
 turtle.speed(200)
 WIDTH, HEIGHT = 600,700
@@ -69,7 +68,8 @@ WIDTH, HEIGHT = 600,700
 screen = turtle.Screen()
 screen.setup(WIDTH + 4, HEIGHT + 8)  # fudge factors due to window borders & title bar
 screen.setworldcoordinates(0, 0, WIDTH, HEIGHT)
-
+screen.bgcolor("black")
+    
 def segment(start,end):
     turtle.pensize(2)
     turtle.pencolor("white")
