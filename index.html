@@ -52,8 +52,7 @@ function runit() {
 import copy 
 import time
 import random
-from turtle import *
-
+import turtle
 global t, tab, sign, working, profondeur
 
 try:
@@ -62,22 +61,22 @@ except:
     t = Turtle()
 
 
-bgcolor("black")
-pencolor("white")
-speed(200)
+turtle.bgcolor("black")
+turtle.pencolor("white")
+turtle.speed(200)
 WIDTH, HEIGHT = 600,700
 
-screen = Screen()
+screen = turtle.Screen()
 screen.setup(WIDTH + 4, HEIGHT + 8)  # fudge factors due to window borders & title bar
 screen.setworldcoordinates(0, 0, WIDTH, HEIGHT)
 
 def segment(start,end):
-    pensize(2)
-    pencolor("white")
-    penup()
-    goto(start)
-    pendown()
-    goto(end)
+    turtle.pensize(2)
+    turtle.pencolor("white")
+    turtle.penup()
+    turtle.goto(start)
+    turtle.pendown()
+    turtle.goto(end)
 
 def grille():
 #     horizontal bars
@@ -117,22 +116,22 @@ def cross(x,y):
     e1 = (x+20,y-20)
     s2 = (x+20,y+20)
     e2 = (x-20,y-20)
-    print(segment(s1,e1))
-    print(segment(s2,e2))
+    segment(s1,e1)
+    segment(s2,e2)
     
 def circ(x,y): 
-    pensize(2)
-    pencolor("white")
-    penup()
-    goto(x,y-50)
-    pendown()
-    circle(50)
+    turtle.pensize(2)
+    turtle.pencolor("white")
+    turtle.penup()
+    turtle.goto(x,y-50)
+    turtle.pendown()
+    turtle.circle(50)
     
 def dessinebouton(i):
     segment((i*60,600),(i*60,700))
-    penup()
-    goto(i*60-40,620)
-    write(str(i))
+    turtle.penup()
+    turtle.goto(i*60-40,620)
+    turtle.write(str(i))
     
 def dessineboutons():
     for i in range(1,9):
@@ -282,6 +281,7 @@ sign = "X"
 print(grille())
 onscreenclick(clicked)
 mainloop()
+
     
 </textarea><br/> 
 <button type="button" onclick="runit()">Run</button> 
