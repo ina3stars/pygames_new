@@ -12,7 +12,7 @@
     <div id="mycanvas"  height="500" width="800"
 	style="border-style: solid;"></div>
 
-<textarea id="code" rows="0" cols="0">
+<textarea id="code" rows="24" cols="80">
 This is my code
 
 import copy 
@@ -244,11 +244,11 @@ difficulte = 3
 tab = [["." for i in range(3)]for j in range(3)]
 working=False
 sign = "X"
-turtle.tracer(0, 0)
+turtle.tracer(False)
 dessineboutons()
 grille()
 turtle.update()
-turtle.tracer(1, 10)
+turtle.tracer(True)
 screen.onscreenclick(clicked)
 turtle.mainloop()
     
