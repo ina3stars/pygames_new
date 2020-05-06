@@ -182,7 +182,6 @@ def clicked(x,y):
             else:
                 j=1
             clickmove(i,j)
-        print(difficulte)
         working=False
 
 def centre(n):
@@ -279,7 +278,7 @@ tab = [["." for i in range(3)]for j in range(3)]
 working=False
 sign = "X"
 print(grille())
-turtle.onscreenclick(clicked)
+screen.onscreenclick(clicked)
 turtle.mainloop()
 
     
