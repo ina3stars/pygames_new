@@ -13,7 +13,7 @@
 	style="border-style: solid;"></div>
 
 <textarea id="code" rows="24" cols="80">
-This is my code
+
 
 import copy 
 import time
@@ -239,18 +239,18 @@ def fini(tablocal):
                 return(True)
     return(False)
 
-
 difficulte = 3
 tab = [["." for i in range(3)]for j in range(3)]
 working=False
 sign = "X"
-
+turtle.tracer(0, 0)
 dessineboutons()
-grille()
+print(grille())
 turtle.update()
-
+turtle.tracer(1, 10)
 screen.onscreenclick(clicked)
 turtle.mainloop()
+
     
 </textarea>
     <script>
