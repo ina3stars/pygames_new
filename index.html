@@ -1,0 +1,326 @@
+<html> 
+<head> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt-stdlib.js" type="text/javascript"></script> 
+
+
+</head> 
+
+
+<body>
+    <div id="mycanvas"  height="500" width="800"
+	style="border-style: solid;"></div>
+
+<textarea id="code" rows="0" cols="0">
+
+import copy 
+import time
+import random
+import turtle
+global t, screen, tab, sign, working, difficulte
+
+try:
+    t = turtle.Turtle()
+except:
+    t = turtle.Turtle()
+
+
+
+turtle.pencolor("white")
+turtle.speed('fastest')
+WIDTH, HEIGHT = 600,750
+
+screen = turtle.Screen()
+screen.setup(WIDTH + 4, HEIGHT + 8)  # fudge factors due to window borders & title bar
+screen.setworldcoordinates(0, 0, WIDTH, HEIGHT)
+screen.bgcolor('lightblue')
+
+
+def segment(start,end):
+    turtle.pensize(2)
+    turtle.pencolor("white")
+    turtle.penup()
+    turtle.goto(start)
+    turtle.pendown()
+    turtle.goto(end)
+
+def grille():
+    turtle.tracer(0, 0)
+#     horizontal bars
+    start = (0,600)
+    end = (600,600)
+    start1 = (0,400)
+    end1 = (600,400)
+    start2 = (0,200)
+    end2 = (600,200)
+    start3 = (0,0)
+    end3 = (600,0)
+    start4 = (0,700)
+    end4 = (600,700)
+    start5 = (0,0)
+    end5 = (600,0)
+    segment(start,end)
+    segment(start1,end1)
+    segment(start2,end2)
+    segment(start4,end4)
+    segment(start5,end5)
+#     vertical bars
+    s1 = (200,600)
+    e1 = (200,0)
+    s2 = (400,600)
+    e2 = (400,0)
+    s3 = (0,0)
+    e3 = (0,700)
+    s4 = (600,0)
+    e4 = (600,700)
+    segment(s1,e1)
+    segment(s2,e2)
+    segment(s3,e3)
+    segment(s4,e4)
+    turtle.update()
+    turtle.tracer(1, 10)
+    
+def cross(x,y):
+    s1 = (x-20,y+20)
+    e1 = (x+20,y-20)
+    s2 = (x+20,y+20)
+    e2 = (x-20,y-20)
+    segment(s1,e1)
+    segment(s2,e2)
+    turtle.penup()
+    
+def circ(x,y): 
+    turtle.pensize(2)
+    turtle.pencolor("white")
+    turtle.penup()
+    turtle.goto(x,y-50)
+    turtle.pendown()
+    turtle.circle(50)
+    turtle.penup()
+    
+def dessinebouton(i,j,k,taille,l):
+    global t
+    turtle.tracer(0, 0)
+    turtle.pencolor('white')
+    segment((i*60,600),(i*60,700))
+    turtle.penup()
+    turtle.goto(i*60-l,620)
+    turtle.pendown()
+    turtle.color(k)
+    turtle.write(j,font=taille)
+    turtle.pencolor('white')
+    turtle.update()
+    turtle.tracer(1, 10)
+    
+    
+def dessineboutons():
+    global difficulte
+    
+    compteur = 0
+    for i in range(1,11):
+        compteur = compteur + 1
+        if compteur <= 9:
+            if difficulte==i:
+                dessinebouton(i, compteur, 'red',("Arial", 22, 'normal'), 40)
+            else:
+                dessinebouton(i,compteur, 'white',("Arial", 22, 'normal'),40)
+        else:
+            dessinebouton(i,"Replay", 'white',("Arial", 12, 'normal'),54)
+
+def clickmove(i,j):
+    global tab, sign, t, working, difficulte
+    
+    if (tab[i][j] == ".") and (not fini(tab)):
+        x = centre(j)
+        y = centre(i)
+        cross(x,y)
+
+        tab = play_move(tab, (i,j),"X")
+        
+        if evaluate(tab,"X") > 500:
+            turtle.goto(100,715)
+            turtle.write("YOU WIN ! ",font=("Arial", 22, 'normal'))
+   
+        elif not space_remain(tab):
+            turtle.goto(100,715)
+            turtle.write(" IT'S A DRAW ! ",font=("Arial", 22, 'normal'))
+        if not fini(tab):
+            
+            tab, whatwillhappen, ordimove = joue(tab, "O", difficulte)
+            x = centre(ordimove[1])
+            y = centre(ordimove[0])
+            circ(x,y)
+            if evaluate(tab,"O") > 500:
+                turtle.goto(100,715)
+                turtle.write(" YOU LOSE ! ",font=("Arial", 22, 'normal'))
+
+            elif not space_remain(tab):
+                turtle.goto(100,715)
+                turtle.write(" IT'S A DRAW ! ",font=("Arial", 22, 'normal'))
+
+    else:
+        turtle.penup()
+        turtle.goto(100,725)
+        turtle.pendown()
+        turtle.write("sorry that move has already been played ")
+
+        
+def changedifficulte(x):
+    global difficulte
+    difficulte = int(x/60 + 1) 
+
+def clicked(x,y):
+    global working
+    if not working:
+        working=True
+        if y>600:
+            if x<540:
+                changedifficulte(x)
+                dessineboutons()
+            else:
+                turtle.clear()
+                init()
+        else:
+            if y < 200:
+                i=0
+            elif y > 400:
+                i=2
+            else:
+                i=1
+
+            if x < 200:
+                j=0
+            elif x > 400:
+                j=2
+            else:
+                j=1
+            clickmove(i,j)
+        working=False
+
+def centre(n):
+    return(100 + n*200)
+
+
+tab = [["." for i in range(3)]for j in range(3)]
+
+def play_move(tablocal, movelocal, sign):
+    tablocal[movelocal[0]][movelocal[1]] = sign
+    return(tablocal)
+
+def evaluate(tablocal,sign):
+    lst1 = [tablocal[0][0], tablocal[0][1], tablocal[0][2]]
+    lst2 = [tablocal[1][0], tablocal[1][1], tablocal[1][2]]
+    lst3 = [tablocal[2][0], tablocal[2][1], tablocal[2][2]]
+
+
+    lst4 = [tablocal[0][0], tablocal[1][0], tablocal[2][0]]
+    lst5 = [tablocal[0][1], tablocal[1][1], tablocal[2][1]]
+    lst6 = [tablocal[0][2], tablocal[1][2], tablocal[2][2]]
+
+    lst7 = [tablocal[0][0], tablocal[1][1], tablocal[2][2]]
+    lst8 = [tablocal[0][2], tablocal[1][1], tablocal[2][0]]
+
+    possibilities = [lst1,lst2,lst3,lst4,lst5,lst6,lst7,lst8]
+    score = 0
+    for i in possibilities:
+        if i == ["O","O","O"]:
+            score = score + 1000
+        if i == ["X","X","X"]:
+            score = score - 1000
+    if sign == "X":
+        score = score * (-1)
+        
+    return(score)
+
+def space_remain(tablocal):
+    for i in tablocal:
+        for j in i:
+            if "." == j:
+                return(True)
+    return(False)
+
+
+def joue(tablocal, sign, profondeur):
+    best_moves = []
+    allm = all_moves(tablocal)
+    for l in allm:
+        nt = play_move(copy.deepcopy(tablocal), l, sign)
+        if (not fini(nt)) and (profondeur >0):
+            nt2, maximum2, best_position2 = joue(nt,opposite_of_sign(sign), profondeur-1)
+            best_moves = best_moves + [-maximum2]
+        else:
+            best_moves = best_moves + [evaluate(nt,sign)]
+    maximum = best_moves.index(max(best_moves))
+    best_position = allm[maximum]
+    return(play_move(tablocal, best_position, sign), max(best_moves), best_position)
+
+def opposite_of_sign(s):
+    if s == "X":
+        return("O")
+    else:
+        return("X")
+
+def all_moves(tablocal):
+    movie = []
+    counterofline = 0
+    counterofcolumn = 0
+    for i in tablocal:
+        counterofline = counterofline + 1
+        counterofcolumn = 0
+        for l in i:
+            counterofcolumn = counterofcolumn + 1
+            if "." == l:
+                movie = movie + [(counterofline-1,counterofcolumn-1)]
+    return(movie)
+
+def fini(tablocal):
+    if evaluate(tablocal,"X") > 500:
+        return(True)
+    else:
+        if evaluate(tablocal,"O") > 500:
+            return(True)
+        else:
+            if not space_remain(tablocal):
+                return(True)
+    return(False)
+
+
+def init():
+    global tab, working,sign, difficulte
+    tab = [["." for i in range(3)]for j in range(3)]
+    working=False
+    difficulte=3
+    sign = "X"
+    dessineboutons()
+    grille()
+    
+    
+        
+                          
+
+init()
+screen.onscreenclick(clicked)
+turtle.mainloop()
+    
+
+
+    
+</textarea>
+    <script>
+        var prog = document.getElementById("code").value;
+	function builtinRead(x) {
+	    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+		    throw "File not found: '" + x + "'";
+	    return Sk.builtinFiles["files"][x];
+	}
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+
+    Sk.configure({ read: builtinRead });
+
+    Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody("<stdin>",false,prog,true);
+    });
+    </script>
+  </body>
+</html>
