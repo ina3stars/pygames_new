@@ -14,7 +14,6 @@
 	style="border-style: solid;"></div>
 
 <textarea id="code" rows="0" cols="0">
-
 import copy 
 import time
 import random
@@ -26,7 +25,7 @@ try:
 except:
     t = turtle.Turtle()
 
-
+difficulte=3
 
 turtle.pencolor("white")
 turtle.speed('fastest')
@@ -291,7 +290,6 @@ def init():
     global tab, working,sign, difficulte
     tab = [["." for i in range(3)]for j in range(3)]
     working=False
-    difficulte=3
     sign = "X"
     dessineboutons()
     grille()
@@ -304,7 +302,6 @@ init()
 screen.onscreenclick(clicked)
 turtle.mainloop()
     
-
 
     
 </textarea>
