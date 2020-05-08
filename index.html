@@ -14,12 +14,11 @@
 
 <textarea id="code" rows="0" cols="0">
 
-
 import copy 
 import time
 import random
 import turtle
-global t, tab, sign, working, profondeur
+global t, tab, sign, working, difficulte
 
 try:
     t = turtle.Turtle()
@@ -29,8 +28,8 @@ except:
 
 
 turtle.pencolor("white")
-turtle.speed(200)
-WIDTH, HEIGHT = 600,700
+turtle.speed('fastest')
+WIDTH, HEIGHT = 600,750
 
 screen = turtle.Screen()
 screen.setup(WIDTH + 4, HEIGHT + 8)  # fudge factors due to window borders & title bar
@@ -47,6 +46,7 @@ def segment(start,end):
     turtle.goto(end)
 
 def grille():
+    turtle.tracer(0, 0)
 #     horizontal bars
     start = (0,600)
     end = (600,600)
@@ -78,6 +78,8 @@ def grille():
     segment(s2,e2)
     segment(s3,e3)
     segment(s4,e4)
+    turtle.update()
+    turtle.tracer(1, 10)
     
 def cross(x,y):
     s1 = (x-20,y+20)
@@ -86,6 +88,7 @@ def cross(x,y):
     e2 = (x-20,y-20)
     segment(s1,e1)
     segment(s2,e2)
+    turtle.penup()
     
 def circ(x,y): 
     turtle.pensize(2)
@@ -94,17 +97,35 @@ def circ(x,y):
     turtle.goto(x,y-50)
     turtle.pendown()
     turtle.circle(50)
+    turtle.penup()
     
-def dessinebouton(i):
+def dessinebouton(i,j,k,taille,l):
+    turtle.tracer(0, 0)
+    turtle.pencolor('white')
     segment((i*60,600),(i*60,700))
     turtle.penup()
-    turtle.goto(i*60-40,620)
-    turtle.write(str(i))
+    turtle.goto(i*60-l,620)
+    turtle.pendown()
+    turtle.pencolor(k)
+    turtle.write(j,font=taille)
+    turtle.pencolor('white')
+    turtle.update()
+    turtle.tracer(1, 10)
+    
     
 def dessineboutons():
-    for i in range(1,9):
-        dessinebouton(i)
-
+    global difficulte
+    
+    compteur = 0
+    for i in range(1,11):
+        compteur = compteur + 1
+        if compteur <= 9:
+            if difficulte==i:
+                dessinebouton(i, compteur, 'red',("Arial", 22, 'normal'), 40)
+            else:
+                dessinebouton(i,compteur, 'white',("Arial", 22, 'normal'),40)
+        else:
+            dessinebouton(i,"Replay", 'white',("Arial", 12, 'normal'),52)
 
 def clickmove(i,j):
     global tab, sign, t, working, difficulte
@@ -115,18 +136,38 @@ def clickmove(i,j):
         cross(x,y)
 
         tab = play_move(tab, (i,j),"X")
+        
+        if evaluate(tab,"X") > 500:
+            turtle.goto(100,715)
+            turtle.write("YOU WIN ! ",font=("Arial", 22, 'normal'))
+   
+        elif not space_remain(tab):
+            turtle.goto(100,715)
+            turtle.write(" IT'S A DRAW ! ",font=("Arial", 22, 'normal'))
         if not fini(tab):
-            sign = "O"
+            
             tab, whatwillhappen, ordimove = joue(tab, "O", difficulte)
             x = centre(ordimove[1])
             y = centre(ordimove[0])
             circ(x,y)
-        else:
-            print("sorry that move has already been played ")
-          
+            if evaluate(tab,"O") > 500:
+                turtle.goto(100,715)
+                turtle.write(" YOU LOSE ! ",font=("Arial", 22, 'normal'))
+
+            elif not space_remain(tab):
+                turtle.goto(100,715)
+                turtle.write(" IT'S A DRAW ! ",font=("Arial", 22, 'normal'))
+
+    else:
+        turtle.penup()
+        turtle.goto(100,725)
+        turtle.pendown()
+        turtle.write("sorry that move has already been played ")
+
+        
 def changedifficulte(x):
     global difficulte
-    difficulte = int(x/60 + 1)*2+100  
+    difficulte = int(x/60 + 1) 
 
 def clicked(x,y):
     global working
@@ -135,6 +176,10 @@ def clicked(x,y):
         if y>600:
             if x<540:
                 changedifficulte(x)
+                dessineboutons()
+            else:
+                turtle.clear()
+                init()
         else:
             if y < 200:
                 i=0
@@ -239,17 +284,25 @@ def fini(tablocal):
                 return(True)
     return(False)
 
-difficulte = 3
-tab = [["." for i in range(3)]for j in range(3)]
-working=False
-sign = "X"
-turtle.tracer(0, 0)
-dessineboutons()
-print(grille())
-turtle.update()
-turtle.tracer(1, 10)
+
+def init():
+    global tab, working,sign, difficulte
+    tab = [["." for i in range(3)]for j in range(3)]
+    working=False
+    difficulte=3
+    sign = "X"
+    dessineboutons()
+    grille()
+    
+    
+        
+                          
+    
+init()
 screen.onscreenclick(clicked)
 turtle.mainloop()
+    
+
 
     
 </textarea>
