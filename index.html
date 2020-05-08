@@ -18,7 +18,7 @@ import copy
 import time
 import random
 import turtle
-global t, tab, sign, working, difficulte
+global t, screen, tab, sign, working, difficulte
 
 try:
     t = turtle.Turtle()
@@ -34,7 +34,7 @@ WIDTH, HEIGHT = 600,750
 screen = turtle.Screen()
 screen.setup(WIDTH + 4, HEIGHT + 8)  # fudge factors due to window borders & title bar
 screen.setworldcoordinates(0, 0, WIDTH, HEIGHT)
-screen.bgcolor("black")
+screen.bgcolor('lightblue')
 
 
 def segment(start,end):
@@ -100,13 +100,14 @@ def circ(x,y):
     turtle.penup()
     
 def dessinebouton(i,j,k,taille,l):
+    global t
     turtle.tracer(0, 0)
     turtle.pencolor('white')
     segment((i*60,600),(i*60,700))
     turtle.penup()
     turtle.goto(i*60-l,620)
     turtle.pendown()
-    turtle.pencolor(k)
+    turtle.color(k)
     turtle.write(j,font=taille)
     turtle.pencolor('white')
     turtle.update()
@@ -125,7 +126,7 @@ def dessineboutons():
             else:
                 dessinebouton(i,compteur, 'white',("Arial", 22, 'normal'),40)
         else:
-            dessinebouton(i,"Replay", 'white',("Arial", 12, 'normal'),52)
+            dessinebouton(i,"Replay", 'white',("Arial", 12, 'normal'),54)
 
 def clickmove(i,j):
     global tab, sign, t, working, difficulte
@@ -273,7 +274,6 @@ def all_moves(tablocal):
                 movie = movie + [(counterofline-1,counterofcolumn-1)]
     return(movie)
 
-	
 def fini(tablocal):
     if evaluate(tablocal,"X") > 500:
         return(True)
@@ -298,7 +298,7 @@ def init():
     
         
                           
-    
+
 init()
 screen.onscreenclick(clicked)
 turtle.mainloop()
