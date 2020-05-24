@@ -1,0 +1,210 @@
+<html> 
+<head> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt-stdlib.js" type="text/javascript"></script> 
+
+
+</head> 
+
+
+	
+<body>
+    <div id="mycanvas"  height="500" width="800"
+	style="border-style: solid;"></div>
+
+<textarea id="code" rows="0" cols="0">
+
+
+
+from turtle import Screen, Turtle
+import math
+import random
+
+global recette1, recette2, t
+
+
+try:
+    t = turtle.Turtle()
+except:
+    t = turtle.Turtle()
+
+# turtle.pencolor(random(),random(),random())
+t.speed('fastest')
+WIDTH, HEIGHT = 600,600
+
+screen = turtle.Screen()
+screen.setup(WIDTH + 4, HEIGHT + 8)  # fudge factors due to window borders & title bar
+screen.setworldcoordinates(0, 0, WIDTH, HEIGHT)
+# screen.bgcolor('darkblue')
+
+
+def present():
+    global t
+    turtle.tracer(0, 0)
+    turtle.penup()
+    turtle.goto(125,550)
+    turtle.write("draw a shape between the two points",font=("Arial", 15, 'normal'))
+    turtle.penup()
+    turtle.goto(200,400)
+    turtle.pendown()
+    turtle.circle(5)
+    turtle.penup()
+    turtle.goto(400,400)
+    turtle.pendown()
+    turtle.circle(5)
+    turtle.penup()
+    turtle.goto(250,200)
+    turtle.pendown()
+    turtle.goto(250,170)
+    turtle.goto(350,170)
+    turtle.goto(350,200)
+    turtle.goto(250,200)
+    turtle.penup()
+    turtle.goto(275,175)
+    turtle.write("done",font=("Arial", 15, 'normal'))
+    turtle.update()
+    turtle.tracer(1, 10)
+    
+def circ():
+    global t
+    turtle.tracer(0,0)
+    turtle.circle(2)
+    turtle.update()
+    turtle.tracer(1, 10)
+    
+def segment(start,end):
+    global t
+    turtle.tracer(0, 0)
+    turtle.penup()
+    turtle.goto(start)
+    turtle.pendown()
+    turtle.goto(end)
+    turtle.update()
+    turtle.tracer(1, 10)
+    
+def clicked(x,y):
+    global recette1, recette2, t
+    if y>201:
+        turtle.penup()
+        turtle.goto(x,y)
+        turtle.pendown()
+        circ()
+        recette1 = recette1 + [(x,y)]
+        for i in range(len(recette1)-1):
+            segment(recette1[i+1],recette1[i])
+            
+    elif (x>250) and (x<350) and (y>170) and (y<200):
+        recette1 = recette1 + [(400,400)]
+        recette2 = converti_recette(recette1)
+        turtle.clear()
+        turtle.penup()
+        turtle.goto(220,420)
+        turtle.pendown()
+        turtle.tracer(0, 0)
+        execute_figure(200, 3)
+        turtle.right(60)
+        execute_figure(200, 3)
+        turtle.right(60)
+        execute_figure(200, 3)
+        turtle.right(60)
+        execute_figure(200, 3)
+        turtle.right(60)
+        execute_figure(200, 3)
+        turtle.right(60)
+        execute_figure(200, 3)
+        turtle.right(60)
+        turtle.update()
+        turtle.tracer(1, 10)
+        
+        
+        
+def converti_recette(rct1):
+    rct2 = []
+    for i in range(len(rct1)-1):
+        o = rct1[i+1][1]-rct1[i][1]
+        adj = rct1[i+1][0]-rct1[i][0]
+        
+        if (adj >= 0) and (o >= 0):
+            ar = math.atan(o/adj)
+            a = ar*180/math.pi
+            rct2 = rct2 + [('turnleft',a)]
+            
+        elif (adj<=0) and (o>=0):
+            ar = math.atan(o/(-adj))
+            ad = ar*180/math.pi
+            a = 180-ad
+            rct2 = rct2 + [('turnleft',a)]
+        
+        elif (adj<=0) and (o<=0):
+            ar = math.atan(-o/-adj)
+            ad = ar*180/math.pi
+            a = 180+ad
+            rct2 = rct2 + [('turnleft',a)]
+        
+        elif (adj>=0) and (o<=0):
+            ar = math.atan(-o/adj)
+            ad = ar*180/math.pi
+            a = 360-ad
+            rct2 = rct2 + [('turnleft',a)]
+            
+        aucarre = o**2 + adj**2
+        distance = aucarre**0.5
+        rct2 = rct2 + [('avance',distance)]
+        rct2 = rct2 + [('turnright',a)]
+        
+    return(rct2)
+    
+
+
+def execute_figure(longueur,profondeur):
+    global recette2, t
+#     nouvelle_recette = modifrecette(rectte2,i[1])
+    for i in recette2:
+        print(i)
+        if i[0] == 'turnright':
+            turtle.right(i[1])
+        if i[0] == 'turnleft':
+            turtle.left(i[1])
+        if i[0] == 'avance':
+            nouvelle_longueur = i[1] / 200 * longueur
+            if (nouvelle_longueur > 20) and (profondeur >0):
+                execute_figure(nouvelle_longueur, profondeur-1)
+                
+            else:
+                turtle.pencolor(random.random(),random.random(),random.random())
+                turtle.pensize(2)
+                turtle.forward(nouvelle_longueur)
+    
+    
+    
+
+
+
+present()
+recette1 = [(200,400)]
+
+screen.onscreenclick(clicked)
+turtle.mainloop()
+
+
+
+    
+</textarea>
+    <script>
+        var prog = document.getElementById("code").value;
+	function builtinRead(x) {
+	    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+		    throw "File not found: '" + x + "'";
+	    return Sk.builtinFiles["files"][x];
+	}
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+
+    Sk.configure({ read: builtinRead });
+
+    Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody("<stdin>",false,prog,true);
+    });
+    </script>
+  </body>
+</html>
