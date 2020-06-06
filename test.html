@@ -1,0 +1,394 @@
+Skip to content
+ 
+Search…
+All gists
+Back to GitHub
+@ina3stars 
+@bnmnetp bnmnetp/simpleskulpt.html
+Last active last month • Report abuse
+24
+21
+ Code Revisions 5 Stars 24 Forks 21
+<script src="https://gist.github.com/bnmnetp/4650616.js"></script>
+  
+Here is about the simplest example I can think of that gets you a working skulpt environment. This little sample shows regular python as well as importing a module.
+ simpleskulpt.html
+<html> 
+<head> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt-stdlib.js" type="text/javascript"></script> 
+
+</head> 
+
+<body> 
+
+<script type="text/javascript"> 
+// output functions are configurable.  This one just appends some text
+// to a pre element.
+function outf(text) { 
+    var mypre = document.getElementById("output"); 
+    mypre.innerHTML = mypre.innerHTML + text; 
+} 
+function builtinRead(x) {
+    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+            throw "File not found: '" + x + "'";
+    return Sk.builtinFiles["files"][x];
+}
+
+// Here's everything you need to run a python program in skulpt
+// grab the code from your textarea
+// get a reference to your pre element for output
+// configure the output function
+// call Sk.importMainWithBody()
+function runit() { 
+   var prog = document.getElementById("yourcode").value; 
+   var mypre = document.getElementById("output"); 
+   mypre.innerHTML = ''; 
+   Sk.pre = "output";
+   Sk.configure({output:outf, read:builtinRead}); 
+   (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+   var myPromise = Sk.misceval.asyncToPromise(function() {
+       return Sk.importMainWithBody("<stdin>", false, prog, true);
+   });
+   myPromise.then(function(mod) {
+       console.log('success');
+   },
+       function(err) {
+       console.log(err.toString());
+   });
+} 
+</script> 
+
+<h3>Try This</h3> 
+<form> 
+<textarea id="yourcode" cols="40" rows="10">import turtle
+
+t = turtle.Turtle()
+t.forward(100)
+
+print "Hello World" 
+</textarea><br /> 
+<button type="button" onclick="runit()">Run</button> 
+</form> 
+<pre id="output" ></pre> 
+<!-- If you want turtle graphics include a canvas -->
+<div id="mycanvas"></div> 
+
+</body> 
+
+</html> 
+@Chuphay
+Chuphay commented on 12 Dec 2013
+I'm just getting started with programming, but this didn't work for me. even after changing
+/mycanvas to /canvas. The console logger says that Sk is not defined
+
+@andrewcase
+andrewcase commented on 15 Mar 2014
+The skulpt.min.js and skulpt-stdlib.js need to be included with this, or provide a full URL for them. For example:
+
+<script src="http://skulpt.org/static/skulpt.min.js" type="text/javascript"></script> <script src="http://skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script>
+@rsaez
+rsaez commented on 17 Apr 2014
+Where is the example @andrewcase
+
+@iptq
+iptq commented on 14 Aug 2014
+I'm getting "ImportError: No module named on line "
+
+@akaak
+akaak commented on 6 Jan 2015
+The section should have the full url to the JS files. like this:
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script> 
+    <script src="http://www.skulpt.org/static/skulpt.min.js" type="text/javascript"></script> 
+    <script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script> 
+Or, see this gist: https://gist.github.com/akaak/42d4a78cef7f208bc343 and it works!
+
+@akaak
+akaak commented on 6 Jan 2015
+Looks like @andrewcase comment did not display what he wanted to display because Markdown did not parse it as code!
+
+@CosmicWebServices
+CosmicWebServices commented on 27 Feb 2015
+This is great!
+
+@brunodd
+brunodd commented on 23 Mar 2015
+This used to work great, but now I get:
+
+ExternalError: TypeError: Cannot read property 'firstChild' of null on line 1
+(Only with turtles)
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 23 Mar 2015
+I just updated this gist, and there are a few small but important changes to notice.
+
+Notice that we now wrap the Sk.importMainWithBody inside Sk.misceval.asyncToPromise (lines 36-44) Also notice that there is a fourth parameter Sk.importMainWithBody("", false, prog, true); which is set to true to enable async processing. This has the amazing effect that turtle now runs asynchronously! No more will the turtle slow down as the drawing becomes larger, no more do precompute the entire drawing and then animate it later. Now it runs in real time. Which also means that we can, and do, support events: onclick, onkey, ontimer!
+We also made the change that you no longer need to supply a canvas element. (line 61) You now provide a div. and turtle will create the appropriate drawing context. Still a canvas for now, but could be SVG or webgl or whatever in the future.
+Instead of Sk.canvas we now use the more generic way of connecting the canvas with (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas'; (line 35)
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 23 Mar 2015
+test
+
+@brunodd
+brunodd commented on 23 Mar 2015
+I copy-pasted the gist into my project as a test run and it works smoothly. A big thanks to all those involved for the quick replies and easy fixes.
+A quick question though:
+How can I adjust the size/border/... of the 'mycanvas' div if it is no longer a canvas?
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 24 Mar 2015
+You can adjust the size in a couple of ways: Sk.TurtleGraphics.target.height = will give an initial height. It will also respect a call to Screen.setup(height,width) in the turtle program itself. bordering can be done with CSS.
+
+Brad
+
+@TimRohr
+TimRohr commented on 26 Apr 2015
+I have been able to run this successfully on my webpage with no issues. I then decided to try and modify the python code with my own code, but now when I hit run nothing happens? Any ideas would be greatly appreciated.
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 26 Apr 2015
+Have you checked the javascript console? Its pretty hard to know what happened without knowing how you changed the python or anything else. The most likely explanation is that you have an error in your python. In that case you will see the error message in the javascript console. That is what the console.log(err.toString) call does.
+
+@polyphemus11
+polyphemus11 commented on 8 Jul 2015
+How do I include the turtle canvas? I went to CodeMirror and downloaded the turtle.js file, now where do I add the javascript code? I added it in the HEAD section, the FORM section, and wrapped it around the FORM section. I don't know what it means by, "include a canvas." Where do I include that code? What code do I include? Thanks for the help!
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 8 Jul 2015
+@polyphemus11, you don't need to do anything more, this gist has everything you need to run the example on the page itself. The canvas element is automatically added to the div. Did the page not work for you?
+
+@geeksailor
+geeksailor commented on 24 Aug 2015
+Is there any known browser compatibility issues? I am forced to use POS IE 10 at work and when I want to try and build my own Skulpt here it does not seem to work. All I get is a large black bar across the bottom and nothing outputs when I hit run. I have not made any modifications to the script either in the html or javascripts. Thanks!
+
+@geeksailor
+geeksailor commented on 24 Aug 2015
+Side note, I did load it into Firefox Portable (FPP) which I have and it appears to work fine. I would like to try and see if I can get it to work in IE though so I don't possibly get in trouble using a program I am not allowed to use.
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 24 Aug 2015
+Do the examples at skulpt.org work in IE for you? I'm a little surprised it doesn't just work. Not that I test IE regularly, but the last time I tried everything worked fine.
+
+@geeksailor
+geeksailor commented on 24 Aug 2015
+The Skulpt site works fine for me oddly enough.
+
+@geeksailor
+geeksailor commented on 24 Aug 2015
+I edited the html to run the javascripts locally rather than remotely from the Skulpt site and enabled error output and I got the following error now:
+Webpage error details
+
+User Agent:
+Timestamp: Mon, 24 Aug 2015 15:47:03 UTC
+
+Message: Object doesn't support property or method 'create'
+Line: 998
+Char: 94
+Code: 0
+URI: skulpt.min.js
+
+@geeksailor
+geeksailor commented on 24 Aug 2015
+Running the javascript codes remotely gives me:
+Webpage error details
+
+User Agent:
+Timestamp: Mon, 24 Aug 2015 15:54:51 UTC
+
+Message: Script error
+Line: 0
+Char: 0
+Code: 0
+URI: http://www.skulpt.org/static/skulpt.min.js
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 24 Aug 2015
+Just cloned the gist to my windows 10 VM and opened it up. Works fine there, so I'm not sure what is going on for you.
+
+@calebwillden
+calebwillden commented on 21 Mar 2016
+This is awesome! I love Python, but I know almost nothing about HTML and Javascript. Is there a way to just get it to run the code without making a textbox and "Run" button?
+
+@ghost
+ghost commented on 22 Aug 2016
+@Carcabob you have to have a python web server and server interaction for that, not with Skulpt. Skulpt is just an emulator of python.
+
+@saibotshamtul
+saibotshamtul commented on 11 Oct 2016 • 
+@Carcabob Yes, it can be done, if, at the bottom of the page, you add Javascript code that calls the runit function, it should run the code when the page loads. You can combine this with making the textbox display:none to hide it, and it should work how you want.
+
+For example: http://codepen.io/saibotshamtul/full/LRmpmm/
+
+@Amarix
+Amarix commented on 10 Jul 2017
+Thank you!!
+
+@reganarntzgray
+reganarntzgray commented on 11 Aug 2017
+Hi, I am very new to programming. I am learning python and have created an interactive blackjack game that I wanted to share on my squarespace website. I tried posting in the gist on a squarespace code block and the run button and python text showed up but there is nowhere for the output to show up and nothing happens when I click run. Any advice?
+
+Thanks!!
+Regan
+
+@GraniteConsultingReviews
+GraniteConsultingReviews commented on 4 Sep 2017
+I am trying this code but this is not working I have a problem in script which is not giving proper result.
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 4 Sep 2017
+If I download the gist and bring it up in my browser it runs the example just fine. I don't know how to help you GraniteConsultingReviews because you haven't given me any information on what you are trying to do or what kind of script you are trying to run or even what is going wrong.
+
+@Solomon1984ustc
+Solomon1984ustc commented on 8 Jan 2018
+when I copy skulpt.min.js and skulpt-stdlib.js to the local, they donnot work,why?
+
+@prescod
+prescod commented on 5 Feb 2018
+I'm skeptical that line 33 is necessary:
+
+Sk.pre = "output";
+
+It seems to duplicate the role of the outf function.
+
+It seems to work for me when I comment it out.
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 5 Feb 2018
+It will work fine if that is the only instance of skulpt on the page. This may be totally left over, but it is important that we can have multiple instances of skulpt running on the page each with their own distinct output, and early on, if I recall correctly, this was a way to handle that. I never committed to making this a minimal perfect gist.
+
+@edips
+edips commented on 8 Dec 2018 • 
+Thank you. This is the best documentation for understanding skulpt.
+
+@mukarharprit
+mukarharprit commented on 9 May 2019
+Can Skulpt support numpy, pandas and matplotlib modules?
+
+@thlengane
+thlengane commented on 22 May 2019
+I have tried "import os" but it doesn't seem to accept it, how can I get around this?
+
+@christiantakle
+christiantakle commented on 11 Apr • 
+Hi I was trying to teach a friend some javascript and he was using skulpt. I are quite many anti-patterns used in the above I rewrote it with him while explaining the what/why. Note I'm using newer browser features like ?. and arrow-functions so will only work in evergreen browsers. However I assume most people will work in a package.json env using some form of transpiler.
+
+I will just leave the snippet here incase you want to use some if it. You can dial back the features used but newer ordering make more sense.
+
+Notes:
+
+jquery isn't used just confuse people that its imported.
+Sk.pre = "output"; @ line 33 what is this doing it make no sense and code runs fine without it.
+import the script at the end of the body this mean that the html is present when document.get... is called so the references can be cache and its easier to spot the moving parts.
+type="text/javascript" not needed in html:5
+<html>
+  <head>
+    <script src="http://www.skulpt.org/js/skulpt.min.js"></script>
+    <script src="http://www.skulpt.org/js/skulpt-stdlib.js"></script>
+  </head>
+
+  <body>
+    <h3>Try This</h3>
+    <form>
+      <textarea id="skulpt--input" cols="40" rows="10">
+import turtle
+
+t = turtle.Turtle()
+t.forward(100)
+
+print "Hello World" 
+</textarea
+      ><br />
+      <button type="button" onclick="skulptMain()">Run</button>
+    </form>
+    <pre id="skulpt--output"></pre>
+    <div id="skulpt-canvas--output"></div>
+    <script>
+      const inputRef = document.getElementById("skulpt--input");
+      const outputRef = document.getElementById("skulpt--output");
+
+      function skulptMain() {
+        outputRef.innerHTML = "";
+        Sk.configure({
+          output: (text) => {
+            outputRef.innerHTML = outputRef.innerHTML + text;
+          },
+          read: (file) => {
+            if (Sk.builtinFiles?.["files"][file] === undefined) {
+              throw `File not found: '${file}'`;
+            }
+            return Sk.builtinFiles["files"][file];
+          },
+        });
+
+        (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target =
+          "skulpt-canvas--output";
+
+        Sk.misceval
+          .asyncToPromise(() =>
+            Sk.importMainWithBody("<stdin>", false, inputRef.value, true)
+          )
+          .then(
+            (mod) => console.log("success"),
+            (err) => console.log(err.toString())
+          );
+      }
+    </script>
+  </body>
+</html>
+@Sachin5411
+Sachin5411 commented on 21 Apr
+Hi , i want to add other python libraries like numpy , matplotlib, sklearn into the skulpt...
+Can you please tell me if this is possible and how?
+
+thank you
+
+@bnmnetp
+Owner
+Author
+bnmnetp commented on 21 Apr
+skulpt is an implementation of Python in Javascript. It runs completely in the browser. Much of bumpy, matplotlib and sklearn are implemented in C or FORTRAN and do not run in the browser, so this is not as easy as you might think. There are some partial implementations of a few things like numpy that others have done.
+
+@NatiThai
+NatiThai commented on 24 Apr
+I have a big problem, I would like to create a function check(Javascript) text form output but I don't know how to create that
+I need a solution please help.
+
+Best regards
+
+@ina3stars
+ 
+Leave a comment
+
+Attach files by dragging & dropping, selecting or pasting them.
+© 2020 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
