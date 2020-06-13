@@ -19,6 +19,8 @@
 
 
 
+
+
 import turtle
 try:
     t = turtle.Turtle()
@@ -129,23 +131,30 @@ def is_on_road(x,y):
         return(True)
     else:
         return(False)
+    
+def listedespts():
+    lst = []
+    for i in range(1,60):
+        for j in range(1,30):
+            if is_on_road(i*10,j*10):
+                lst = lst + [(i*10,j*10)]
+    return(lst)
+        
 
 def trace_le_parcours():
     global p
-    turtle.tracer(0, 0)
-    turtle.pencolor('black')
-    for i in range(1,60):
-        for j in range (1,30):
-            if is_on_road(i*10,j*10):
-                turtle.penup()
-                turtle.goto(i*10,j*10-0.25)
-                turtle.pendown()
-                turtle.circle(0.5)
+    lst = listedespts()
+    turtle.tracer(0,0)
+    for i in lst:
+        turtle.pencolor('black')
+        turtle.penup()
+        turtle.goto(i[0],i[1])
+        turtle.pendown()
+        turtle.circle(1)
     finish_line()
     dessine_replay()
     turtle.update()
-    turtle.tracer(1, 10)
-    
+    turtle.tracer(1,10)
 
 
 def coups_possibles(lp,cp,ap):
@@ -199,6 +208,8 @@ def draw_possible():
         turtle.circle(3)
         turtle.update()
         turtle.tracer(1, 10)
+        
+
 
     
 def clicked(x,y):
@@ -335,10 +346,10 @@ def dessine_replay():
     turtle.tracer(0, 0)
     turtle.pencolor('black')
     turtle.penup()
-    turtle.goto(420,280)
+    turtle.goto(400,280)
     turtle.pendown()
     turtle.color("black")
-    turtle.write("Replay",font=("Arial", 22, "normal"))
+    turtle.write("Replay",font=("Times New Roman", 22, "normal"))
     turtle.update()
     turtle.tracer(1, 10)
     
@@ -366,9 +377,12 @@ def init():
     fini = False
     profondeur = 3
     
-init()
 
+    
+init()
+# turtle.onkey(quitting, 'q')
 screen.onscreenclick(clicked)
+# turtle.listen()
 turtle.mainloop()
 
 
