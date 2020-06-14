@@ -17,6 +17,7 @@
 
 
 
+
 import turtle
 
 try:
@@ -101,6 +102,7 @@ def dessine_replay():
     
 
 def cross(x,y):
+    turtle.tracer(0,0)
     s1 = (x-30,y+30)
     e1 = (x+30,y-30)
     s2 = (x+30,y+30)
@@ -108,8 +110,11 @@ def cross(x,y):
     segment(s1,e1)
     segment(s2,e2)
     turtle.penup()
+    turtle.update()
+    turtle.tracer(1,10)
     
 def circ(x,y): 
+    turtle.tracer(0,0)
     turtle.pensize(2)
     turtle.pencolor("white")
     turtle.penup()
@@ -117,7 +122,8 @@ def circ(x,y):
     turtle.pendown()
     turtle.circle(30)
     turtle.penup()
-    
+    turtle.update()
+    turtle.tracer(1,10)
 def segment(start,end):
     turtle.pensize(2)
     turtle.pencolor("white")
@@ -330,6 +336,7 @@ def clicked(x,y):
 
 def init():
     global puis, working,sign, profondeur,finished
+    turtle.hideturtle()
     puis = [["." for i in range(7)]for j in range(5)]
     working = False
     finished = False
@@ -342,6 +349,7 @@ init()
 screen.onscreenclick(clicked)
 turtle.mainloop()
     
+        
     
     
 </textarea>
