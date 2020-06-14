@@ -14,7 +14,8 @@
 	style="border-style: solid;"></div>
 
 <textarea id="code" rows="0" cols="0">
-import copy 
+
+import copy
 import time
 import random
 import turtle
@@ -34,7 +35,7 @@ WIDTH, HEIGHT = 600,750
 screen = turtle.Screen()
 screen.setup(WIDTH + 4, HEIGHT + 8)  # fudge factors due to window borders & title bar
 screen.setworldcoordinates(0, 0, WIDTH, HEIGHT)
-screen.bgcolor('lightblue')
+screen.bgcolor('darkblue')
 
 
 def segment(start,end):
@@ -82,6 +83,7 @@ def grille():
     turtle.tracer(1, 10)
     
 def cross(x,y):
+    turtle.tracer(0,0)
     s1 = (x-20,y+20)
     e1 = (x+20,y-20)
     s2 = (x+20,y+20)
@@ -89,8 +91,10 @@ def cross(x,y):
     segment(s1,e1)
     segment(s2,e2)
     turtle.penup()
-    
+    turtle.update()
+    turtle.tracer(1,10)
 def circ(x,y): 
+    turtle.tracer(0,0)
     turtle.pensize(2)
     turtle.pencolor("white")
     turtle.penup()
@@ -98,7 +102,8 @@ def circ(x,y):
     turtle.pendown()
     turtle.circle(50)
     turtle.penup()
-    
+    turtle.update()
+    turtle.tracer(1,10)
 def dessinebouton(i,j,k,taille,l):
     global t
     turtle.tracer(0, 0)
@@ -288,6 +293,7 @@ def fini(tablocal):
 
 def init():
     global tab, working,sign, difficulte
+    turtle.hideturtle()
     tab = [["." for i in range(3)]for j in range(3)]
     working=False
     sign = "X"
