@@ -19,6 +19,7 @@
 
 
 
+
 # import datetime
 
 import turtle
@@ -255,7 +256,7 @@ def clicked(x,y):
                     turtle.update()
                     turtle.tracer(1, 10)
                     
-        if (x > 300 ) and (x < 400) and (y > 270) and (y < 300):
+        if (x > 300 ) and (x < 350) and (y > 270) and (y < 300):
             turtle.clear()
             init()
         working = False
@@ -372,28 +373,28 @@ def finished():
         turtle.goto(10,280)
         turtle.pencolor('black')
         turtle.pendown()
-        turtle.write("YOU CAME FIRST, YOU WIN",font=("Arial", 18, 'normal'))
+        turtle.write("YOU CAME FIRST, YOU WIN",font=("Times New Roman", 15, 'normal'))
         fini = True
     elif (close > len(p)-3):
         turtle.penup()
         turtle.goto(10,280)
         turtle.pencolor('black')
         turtle.pendown()
-        turtle.write(" I CAME FIRST, I WIN ",font=("Arial", 18, 'normal'))
+        turtle.write(" I CAME FIRST, I WIN ",font=("Times New Roman", 15, 'normal'))
         fini = True
     elif trace == []:
         turtle.penup()
         turtle.goto(10,280)
         turtle.pendown()
         turtle.pencolor('black')
-        turtle.write("YOU CRASHED, I WIN ",font=("Arial", 18, 'normal'))
+        turtle.write("YOU CRASHED, I WIN ",font=("Times New Roman", 15, 'normal'))
         fini = True
     elif trace_ordi == []:
         turtle.penup()
         turtle.goto(10,280)
         turtle.pencolor('black')
         turtle.pendown()
-        turtle.write("I CRASHED, YOU WIN ",font=("Arial", 18, 'normal'))
+        turtle.write("I CRASHED, YOU WIN ",font=("Times New Roman", 15, 'normal'))
         fini = True
         
 
@@ -401,10 +402,10 @@ def dessine_replay():
 #     turtle.tracer(0, 0)
     turtle.pencolor('black')
     turtle.penup()
-    turtle.goto(300,280)
+    turtle.goto(320,280)
     turtle.pendown()
     turtle.color("black")
-    turtle.write("Replay",font=("Times New Roman", 22, "normal"))
+    turtle.write("Replay",font=("Times New Roman", 16, "normal"))
 #     turtle.update()
 #     turtle.tracer(1, 10)
     
@@ -443,6 +444,8 @@ init()
 screen.onscreenclick(clicked)
 # turtle.listen()
 turtle.mainloop()
+
+
 
 
 
