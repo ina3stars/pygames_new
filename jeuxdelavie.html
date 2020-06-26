@@ -1,1 +1,214 @@
+<html> 
+<head> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt.min.js" type="text/javascript"></script> 
+<script src="http://www.skulpt.org/js/skulpt-stdlib.js" type="text/javascript"></script> 
 
+
+</head> 
+
+
+	
+<body>
+    <div id="mycanvas"  height="500" width="800"
+	style="border-style: solid;"></div>
+
+<textarea id="code" rows="0" cols="0">
+  
+  import turtle
+import copy
+import time
+import random
+try:
+    t = turtle.Turtle()
+except:
+    t = turtle.Turtle()
+
+turtle.pencolor("white")
+turtle.speed('fastest')
+width, height = 600,700
+
+screen = turtle.Screen()
+screen.setup(width + 15, height + 15)  
+screen.setworldcoordinates(0, 0, width, height)
+# screen.bgcolor('')
+
+def quitting():
+    turtle.bye()
+    
+def centre(n):
+    lc = int(600.0/40)
+    bc = 600.0/40/2
+    return(bc + n*lc)
+    
+def square(x,y):
+    bc = (600.0/40)/2
+    lc = 600.0/40
+    turtle.tracer(0,0)
+    turtle.penup()
+    colorslist = ['lightblue', 'lightpink','purple', 'cyan','lightgreen','orange','red','gold','magenta','darkgreen','chocolate']
+    ncolor = colorslist[int(random.random() * len(colorslist) )]
+    turtle.color(ncolor)
+    turtle.pencolor(ncolor)
+    turtle.begin_fill()
+    turtle.penup()
+    turtle.goto(x+bc,y+bc)
+    turtle.pendown()
+    turtle.forward(bc)
+    turtle.right(90)
+    turtle.forward(lc)
+    turtle.right(90)
+    turtle.forward(lc)
+    turtle.right(90)
+    turtle.forward(lc)
+    turtle.right(90)
+    turtle.forward(bc)
+    turtle.end_fill()
+    turtle.update()
+    turtle.tracer(1,10)
+    
+def squarewhite():
+    global places
+    turtle.tracer(0,0)
+    turtle.penup()
+    counter = -1
+    counters = -1
+    for i in places:
+        counter = counter + 1
+        counters = -1
+        for j in i:
+            counters = counters + 1
+            if j == True:
+                x = centre(counter)
+                y = centre(counters)
+#                 print(True,x,y)
+                
+                square(x,y)
+#             else:
+#                 x = centre(counter)
+#                 y = centre(counters)
+# #                 print(False,x,y)
+#                 square(x,y,'white')
+                
+    turtle.update()
+    turtle.tracer(1,10)
+
+def clicked(x,y):
+    global places, fix, working
+    if y < 600: 
+        if working == False:
+            working = True
+            bc = (600.0/40)/2
+            lc = 600.0/40
+            j = int(x/lc)
+            i = int(y/lc)
+            x = centre(j)
+            y = centre(i)
+            square(x,y)
+            places[j][i] = True
+            working = False
+    else:
+        if x < 300:
+            working = True
+            while not fix:
+    #         print('ici')
+    #             placesold = copy.deepcopy(places)
+                look_around()
+                turtle.clear()
+                squarewhite()
+                time.sleep(1)
+            quitting()
+        else:
+            turtle.clear()
+            init()
+
+
+def look_around():
+    global places, fix
+    placesnew = [[False]*40 for _ in range(40)]
+    for ligne in range(len(places)):
+        for col in range(len(places[ligne])):
+            tot = 0
+            if ligne+1<len(places):
+                if places[ligne+1][col]:
+                    tot=tot+1
+            if ligne-1>0:
+                if places[ligne-1][col]:
+                    tot=tot+1
+            if col+1<len(places[ligne]):
+                if places[ligne][col+1]:
+                    tot=tot+1
+            if col-1>0:
+                if places[ligne][col-1]:
+                    tot=tot+1  
+            if (ligne+1<len(places)) and (col+1<len(places[ligne])) :
+                if places[ligne+1][col+1]:
+                    tot=tot+0.7
+            if (ligne+1<len(places)) and (col-1>0) :
+                if places[ligne+1][col-1]:
+                    tot=tot+0.7
+            if (ligne-1>0) and (col+1<len(places[ligne])) :
+                if places[ligne-1][col+1]:
+                    tot=tot+0.7
+            if (ligne-1<0) and (col-1<0) :
+                if places[ligne-1][col-1]:
+                    tot=tot+0.7
+            if tot >= 2:
+                placesnew[ligne][col] = True
+    
+    if places == placesnew:
+        fix = True
+    places = copy.deepcopy(placesnew)
+    
+    
+def init():
+    global places, fix, working
+    fix = False
+    working = False
+    places = [[False]*40 for _ in range(40)]
+    turtle.hideturtle()
+    turtle.tracer(0,0)
+    turtle.penup()
+    turtle.goto(0,620)
+    turtle.pendown()
+    turtle.goto(600,620)
+    turtle.penup()
+    turtle.goto(20,640)
+    turtle.pendown()
+    turtle.write("DONE",font=("Times New Roman", 18, 'normal'))
+    turtle.penup()
+    turtle.goto(300,700)
+    turtle.pendown()
+    turtle.goto(300,620)
+    turtle.penup()
+    turtle.goto(320,640)
+    turtle.pendown()
+    turtle.write("REDO",font=("Times New Roman", 18, 'normal'))
+    turtle.update()
+    turtle.tracer(1,10)
+    screen.onscreenclick(clicked)
+    turtle.mainloop()
+
+init()
+
+
+
+</textarea>
+    <script>
+        var prog = document.getElementById("code").value;
+	function builtinRead(x) {
+	    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+		    throw "File not found: '" + x + "'";
+	    return Sk.builtinFiles["files"][x];
+	}
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+
+    Sk.configure({ read: builtinRead });
+
+    Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody("<stdin>",false,prog,true);
+    });
+    </script>
+  </body>
+</html>
+© 2020 GitHub, Inc.
