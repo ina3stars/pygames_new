@@ -11,9 +11,8 @@
   Pyodide test page <br>
   Open your browser console to see pyodide output
   <script type="text/javascript">
-        languagePluginLoader.then(function () {
-            pyodide.runPython('
-print("coucou")
+        languagePluginLoader.then(() => {
+           pyodide.runPython(`
 import numpy as np
 import matplotlib.pyplot as plt
 
