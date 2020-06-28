@@ -28,10 +28,15 @@ from js import document as doc
 # Make the "Initializing Python" status disappear
 doc.getElementById("status").innerHTML = ""
 
-for i in range(10):
-   print(i)
+import numpy as np
+import matplotlib.pyplot as plt
 
-print("Hello World") 
+N = 50
+x = np.random.rand(N)
+y = np.random.rand(N)
+
+plt.scatter(x, y)
+plt.show()
 
            `)
          })
