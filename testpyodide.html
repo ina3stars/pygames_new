@@ -13,7 +13,14 @@
   <script type="text/javascript">
         languagePluginLoader.then(function () {
             console.log(pyodide.runPython('import sys\nsys.version'));
-            console.log(pyodide.runPython('print(1 + 2)'));
+            console.log(pyodide.runPython('
+import turtle
+
+t = turtle.Turtle()
+t.forward(100)
+
+print "Hello World" '
+            ));
         });
   </script>
 </body>
