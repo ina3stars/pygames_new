@@ -2,30 +2,32 @@
 <html>
 <body>
 
-<h1>Higher Lower Game</h1>
+<h1 style="color:black;font-size:40px;">Higher Lower Game</h1>
+
+<h2 style="color:black;font-size:30px;">These are the most trending hashtags on twitter </h2>
 
 
-<p>
+<!--<p>-->
+<h3 style="color:black;font-size:25px;">Click on the most trending hashtag's photo </h3>
 
-<span id="pays"></span>
+<span style="color:black;font-size:25px;" id="pays"></span>
 <br>
-Score : <span id="scoredisp"></span>
+Score : <span style="color:black;font-size:25px;" id="scoredisp"></span>
 <br>
 
 <div id="x"></div> 
-<span id="Tag1Name"></span>
+<span style="color:black;font-size:25px;" id="Tag1Name"></span>
 
 <br>
 <div id="y"></div> 
-<span id="Tag2Name"></span><br>
+<span style="color:black;font-size:25px;" id="Tag2Name"></span><br>
 <br>Result<br>
-<span id="winloose"></span><br>
-</p>
+<span style="color:black;font-size:25px;" id="winloose"></span><br>
+<!--</p>-->
 
 <script>
 var score = 0
 var compteur = 0
-
 
 var countries = ["France", "United States","United Kingdom","Germany"];
 var data = [[["canicule", 11367, "https://www.espacemanager.com/sites/default/files/field/image/canicule_forte_chaleur.jpg"], ["SmackDown", 42414, "https://www.usanetwork.com/sites/usanetwork/files/2016/08/wwesmackdownAugust9.jpg"], ["JUVOL", 53680, "https://media.ottobock.com/_web-site/mobility-solutions/complex/juvo/images/juvo_front_1_1_teaser_fallback_retina.jpg"], ["MCIRMA", 71324, "https://pbs.twimg.com/media/Cg_n409WkAAQ7Td.jpg"], ["onepiece987", 13635, "https://i.pinimg.com/originals/3a/0e/7b/3a0e7b039003c77a107d95fe63398864.jpg"], ["exabff", 7794769, "https://pbs.twimg.com/media/EdbahZXUwAAqJpv.jpg:large"], ["exaarmy", 5142722, "https://pbs.twimg.com/media/Ed9-OQfWsAEaOJU.jpg:large"], ["championsleague", 56637, "https://staticr1.blastingcdn.com/media/photogallery/2018/11/30/os/b_1200x630/les-5-meilleurs-buteurs-de-la-ligue-des-champions-depuis-1992-93_2155557.jpg"], ["COVID__19", 60823, "https://www.lynchburg.edu/wp-content/uploads/covid-19/covid-19.jpg"]],
@@ -34,18 +36,22 @@ var data = [[["canicule", 11367, "https://www.espacemanager.com/sites/default/fi
 [['InternationalCatDay', 22751, 'https://i.ytimg.com/vi/-QDhPRthQCQ/maxresdefault.jpg'], ['F170', 48684, 'https://www.plot-it.co.uk/images/stratasys-f123-open_large.jpg'], ['ChampionsLeague', 56889, 'https://staticr1.blastingcdn.com/media/photogallery/2018/11/30/os/b_1200x630/les-5-meilleurs-buteurs-de-la-ligue-des-champions-depuis-1992-93_2155557.jpg'], ['PromiBB', 13919, 'https://bilder.t-online.de/b/86/24/24/24/id_86242424/300_80/tid_da/index.jpg'], ['exabff', 7793062, 'https://pbs.twimg.com/media/EdbahZXUwAAqJpv.jpg:large'], ['juvol', 53901, 'https://media.ottobock.com/_web-site/mobility-solutions/complex/juvo/images/juvo_front_1_1_teaser_fallback_retina.jpg'], ['LiveLikeAli', 1502072, 'https://i.ytimg.com/vi/mbvcRcdmXrw/hqdefault.jpg'], ['COVID__19', 61076, 'https://www.lynchburg.edu/wp-content/uploads/covid-19/covid-19.jpg'], ['heatwave', 17931, 'http://assets.ecenglish.com/blogs/uploads/sites/29/2016/02/heat-wave2.jpg'], ['smackdown', 42473, 'https://www.usanetwork.com/sites/usanetwork/files/2016/08/wwesmackdownAugust9.jpg'], ['AirIndia', 154610, 'https://airbus-h.assetsadobe2.com/is/image/content/dam/products-and-solutions/commercial-aircraft/a320-family/a320neo/A320neo_Air_India_take_off-010.jpg?wid=1920&fit=fit,1&qlt=85,0'], ['fursuitfriday', 14659, 'https://runesfurryblog.files.wordpress.com/2016/05/12966467_1195531547125764_2076775119_n.jpg']],
 // [['熱いぜグラブルの夏', 92982, 'https://lh3.googleusercontent.com/Uqu_zEgOwMNWvC6xbejshM7TONLynhnKAB6GzAfFrEfORk0wVs_M49zQW7g42Rq5QfaosJ1AM6Mh5uEYq9ANqXFALk2I_2mOY_SaStpfZqY'], ['JohnnysDREAMIsLAND', 72395, 'https://pbs.twimg.com/media/EeAS-yCVAAEnuda.jpg'], ['TinyTAN', 129413, 'https://i.ytimg.com/vi/5Oc1gxQCPio/maxresdefault.jpg'], ['InternationalCatDay', 18604, 'https://i.ytimg.com/vi/-QDhPRthQCQ/maxresdefault.jpg'], ['ドリアイ', 57416, 'https://stat.ameba.jp/user_images/20200727/17/reelove8/48/ed/j/o0640061414795171156.jpg'], ['TH_IGOT7TEAM', 877684, 'https://stat.ameba.jp/user_images/20200727/17/reelove8/48/ed/j/o0640061414795171156.jpg'], ['cumartesi', 15081, 'http://img.topresimler.com/tr/cumartesi/cumartesi_015.jpg'], ['世界猫の日', 162260, 'https://cdn-ak.f.st-hatena.com/images/fotolife/a/alc_nakosan/20170804/20170804145554.png'], ['buzdolabi', 12268, 'https://i.ytimg.com/vi/PzXHXF1sIs4/hqdefault.jpg'], ['AskKristSingto', 110229, 'https://i.ytimg.com/vi/PzXHXF1sIs4/hqdefault.jpg'], ['ถ้าไม่สู้ก็อยู่อย่างทาส', 144494, 'https://ogsocial.tvpoolonline.com/wp-content/uploads/2018/01/S__25468955-1600x900.jpg'], ['संजय_सिंह_झूठा_है', 78319, 'https://hindi.oneindia.com/img/2019/11/sanjayc-1574407752.jpg'], ['worldforsushant', 71360, 'https://hindi.oneindia.com/img/2019/11/sanjayc-1574407752.jpg'], ['LAYCONtent', 27642, 'https://thumbs.dreamstime.com/z/hand-holding-phone-taking-photo-hydrangea-flowers-rustic-white-wood-flat-lay-content-social-media-concept-hand-136377888.jpg'], ['まちゅパラ', 51619, 'https://d2l930y2yx77uc.cloudfront.net/production/uploads/images/12070555/profile_76b9d2302e89802e655de6f09d4cee9d.png'], ['DilKoMaineDiKasamTeaser', 54004, 'https://d2l930y2yx77uc.cloudfront.net/production/uploads/images/12070555/profile_76b9d2302e89802e655de6f09d4cee9d.png'], ['ポケモンGO', 22517, 'http://livedoor.blogimg.jp/pokemonpk-go/imgs/0/7/0785d344.jpg'], ['SaturdayThoughts', 19473, 'http://www.lovethispic.com/uploaded_images/168081-Have-A-Great-Saturday.jpg'], ['Shopee88MidYearSale', 11328, 'http://www.lovethispic.com/uploaded_images/168081-Have-A-Great-Saturday.jpg'], ['lovefighters', 29416, 'https://img.discogs.com/4gd9S40nx3I4dkz8jsEEM-KUj7k=/fit-in/300x300/filters:strip_icc():format(jpeg):mode_rgb():quality(40)/discogs-images/R-5643925-1398787465-9743.jpeg.jpg'], ['MewGulfLetsLoveMISSHA', 29637, 'https://pbs.twimg.com/media/EdrHS4iU4AAqm_X.jpg:thumb'], ['DoğruSayınBakanım', 16175, 'https://pbs.twimg.com/media/EdrHS4iU4AAqm_X.jpg:thumb']]
 ]
-
-function mainfunc(score, compteur) {
+function mainfunc(score, compteur,preitem1,preitem2) {
 scoredisp = score+"/"+compteur
 document.getElementById("scoredisp").innerHTML = scoredisp;
 
 
-var zerofifty = compteur % 50 
+var zerofifty = compteur % 40 
 var datanumb = Math.floor(zerofifty/10);
 
 
 
 var item1 = data[datanumb][Math.floor(Math.random() * data[datanumb].length)];
+
+while (preitem1 == item1 || preitem2 == item1){
+    item1 = data[datanumb][Math.floor(Math.random() * data[datanumb].length)];
+}
+
 var pays = countries[datanumb];
 document.getElementById("pays").innerHTML = pays;
 // document.write(item1[0] + "  " + item1[1] + "<br>")
@@ -69,7 +75,7 @@ elt1.onclick = function() {if (item1[1]>item2[1]){
     compteur = compteur + 1;
     scoredisp = score+"/"+compteur
     }
-    mainfunc(score, compteur)
+    mainfunc(score, compteur,item1,item2)
 }
 
 if (compteur == 0) {elt1.appendChild(img1);}
@@ -78,14 +84,13 @@ else {document.getElementById("x").childNodes[0].src = img1.src}
 
 
 
-
-
 var item2 = data[datanumb][Math.floor(Math.random() * data[datanumb].length)];
-while (item2 == item1) {
+
+
+while (item2 == item1 || preitem1 == item2 || preitem2 == item2) {
     item2 = data[datanumb][Math.floor(Math.random() * data[datanumb].length)];
-    
-    
 }
+
 // document.write(item2[0] + "  " + item2[1] + "<br>")
 document.getElementById("Tag2Name").innerHTML = item2[0];
 // document.getElementById("Tag2Score").innerHTML = item2[1];
@@ -105,7 +110,7 @@ elt2.onclick = function() {if (item2[1]>item1[1]){
     compteur = compteur + 1;
     scoredisp = score+"/"+compteur
     }
-    mainfunc(score, compteur)
+    mainfunc(score, compteur,item1,item2)
 }
 
 if (compteur == 0) {elt2.appendChild(img2);} 
@@ -114,7 +119,7 @@ else {document.getElementById("y").childNodes[0].src = img2.src
 }
 }
 
-mainfunc(0,0)
+mainfunc(0,0,"toto","tata")
 
 </script>
 
